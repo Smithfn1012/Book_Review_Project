@@ -315,6 +315,53 @@ function showReviews(review, reviewDiv){
     reviewDiv.append(starsP, contentP,hardRule)
 }
 
+function renderFeaturedBooks(){
+    genreContainer.innerHTML = ''
+    showBookDiv.innerHTML =  ''
+    bookContainer.innerHTML =''
+    fetchAllBooks().then(json => {
+        let reviewsArray = []
+        json.data.forEach(book => {
+            let sumStars = book.attributes.reviews.reduce((acc, review) => acc += review.stars , 0)
+            let averageReviewObj= {
+                bookId: book.id,
+                averageReview: sumStars/book.attributes.reviews.length
+            }
+            reviewsArray.push(averageReviewObj)
+        })
+        let filteredReviews = reviewsArray.filter(review => review.averageReview >= 1 )
+        let sortedReviews = filteredReviews.sort((review1, review2) => (review1.averageReview < review2.averageReview)? 1:-1)
+        let topThreeBooks = sortedReviews.slice(0,3)
+        featuredBooks.innerHTML = '<h1>Highest Rated Books</h1>'
+        topThreeBooks.forEach(averageReviewObj => {
+            fetchFeaturedBooks(averageReviewObj).then(json =>{
+            let elementsArray = renderBookElements(json.data)
+            let bookDiv = document.createElement('div')
+            bookDiv.style.width = "33%"
+            bookDiv.style.position = 'relative'
+            bookDiv.style.display = 'inline-block'
+            let bookTitle = elementsArray[0]
+            bookTitle.className = 'featured-book-title'
+            bookTitle.addEventListener('click', e =>{
+                showBookDetails(json.data)
+            })
+            let bookImg = elementsArray[2]
+            bookImg.className = 'featured-image'
+            bookImg.style.width= '200px'
+            bookImg.addEventListener('click', e =>{
+                showBookDetails(json.data)
+            })
+            let averageReviewP = document.createElement("p")
+            let star = `\u{2B50}`; 
+            averageReviewP.innerHTML = `<strong>Average Rating:</strong> ${star.repeat(averageReviewObj.averageReview)}`
+            bookDiv.append(elementsArray[0],elementsArray[1],bookImg,averageReviewP)
+            featuredBooks.append(bookDiv)
+            })
+        })
+    })
+}
+
+
 
 
 

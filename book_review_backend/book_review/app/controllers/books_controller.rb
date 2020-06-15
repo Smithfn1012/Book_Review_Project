@@ -8,4 +8,9 @@ class BooksController < ApplicationController
         book = Book.find_by(id: params[:id])
         render json: BookSerializer.new(book)
     end
+
+    def create
+        book = Book.create(create_book_params)
+        render json: BookSerializer.new(book)
+    end
 end

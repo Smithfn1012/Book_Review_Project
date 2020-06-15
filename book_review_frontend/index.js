@@ -23,3 +23,8 @@ renderFeaturedBooks()
       return fetch(genresIndexUrl)
       .then(r => r.json())
   }
+
+  function fetchFeaturedBooks(averageReviewObj) {
+      return fetch(`${bookIndexUrl}/${averageReviewObj.bookId}`)
+      .then(r => r.json())
+  }

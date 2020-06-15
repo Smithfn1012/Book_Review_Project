@@ -245,4 +245,8 @@ function renderBookElements(book){
     return elementsArray
 }
 
+function displayReadThroughs(book, numberOfReadings){
+    return book.attributes.read_throughs === null ? numberOfReadings.innerText = `This book has been not been read!` : numberOfReadings.innerText = book.attributes.read_throughs === 1 ? `This book has been read ${book.attributes.read_throughs} time!` : `This book has been read ${book.attributes.read_throughs} times!`
+}
+
 

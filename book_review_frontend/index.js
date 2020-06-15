@@ -181,3 +181,44 @@ searchBar.addEventListener("submit", (e) => {
         })
 })
 formContainer.append(searchBar)
+
+let genreButton = document.createElement("button")
+genreButton.innerText = "Search By Genre"
+genreButton.addEventListener("click",(e)=> {
+    genreContainer.innerHTML = '<h3>Click a Genre to Filter By</h3>'
+    bookContainer.innerHTML = ''
+    //Get all Genres, render them, then add event listeners to each
+    fetchAllGenres().then(genresObject => {
+        let genreList = document.createElement("ul")
+        genreContainer.append(genreList)
+        genresObject.data.forEach(genre=>{
+            let genreLi = document.createElement("li")
+            genreLi.className = 'genre'
+            genreLi.name = genre.attributes.name
+            genreLi.innerText = genre.attributes.name
+            genreLi.addEventListener("click", (e)=>{
+                //When clicked, we fetch all books and then render them by the genre clicked
+                bookContainer.innerHTML = '<h3>Search Results</h3>'
+                fetchAllBooks().then(booksObject=>{
+                    let bookArr = booksObject.data.filter(book => book.attributes.genre.name === e.target.name)
+                    if(bookArr.length > 0){
+                        bookArr.forEach(book=>renderAFilteredBook(book))
+                    } else {
+                        renderErrorMessage()
+                    }
+                })
+            })
+            genreList.append(genreLi)
+        })
+
+        let closeButton = document.createElement('button')
+        closeButton.innerText = 'Exit Genre Search'
+        closeButton.addEventListener('click', e => {
+            genreContainer.innerHTML = ''
+            bookContainer.innerHTML= ''
+        })
+        genreContainer.append(closeButton, hardRule)
+    })
+})
+genreFormContainer.prepend(genreButton)
+

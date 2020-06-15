@@ -87,3 +87,16 @@ function fetchUpdateReadThroughs(book) {
     return fetch(`${bookIndexUrl}/${book.id}`, configObj)
         .then(r => r.json())
 }
+
+function renderErrorMessage(){
+    bookContainer.innerHTML = '';
+    let bookHeader = document.createElement("h3")
+    bookHeader.innerText = 'No books found - Please search again or create a new book!'
+    let bookButton = document.createElement("button")
+    bookButton.innerText = "Create Book"
+    bookButton.addEventListener("click", (e) => {
+        createBook()
+    })
+    bookContainer.append(bookHeader, bookButton)
+
+}

@@ -100,3 +100,42 @@ function renderErrorMessage(){
     bookContainer.append(bookHeader, bookButton)
 
 }
+
+function createBook(){
+    showBookDiv.innerHTML = ''
+    bookContainer.innerHTML = `
+        <form>
+            Book Title: <input name="book-title" required placeholder="Enter a book title..."><br>
+            Author: <input name="book-author" required placeholder="Enter a book author..."><br>
+            Image Url: <input name="book-image" required placeholder="Enter a book image_url..."><br>
+            Genre: <select name="book-genre" placeholder="Enter a book genre..."></select><br>
+            Book Abstract: <textarea name="book-abstract" required placeholder="Enter a book abstract..."></textarea><br>
+            Fiction?: <input type="checkbox" name="fiction" ><br>
+            Create Book: <button>Submit</button>
+        </form>
+    `
+    let closeButton = document.createElement('button')
+    closeButton.innerText = 'I changed my mind!'
+    closeButton.addEventListener('click', e => {
+        genreContainer.innerHTML = ''
+        bookContainer.innerHTML= ''
+    })
+    bookContainer.append(closeButton)
+    const newBookForm = bookContainer.querySelector('form')
+    const genreSelect = newBookForm.querySelector('select')
+        fetchAllGenres().then(json => {
+            json.data.forEach(genre =>{
+                let genreOption = document.createElement('option')
+                genreOption.innerText = genre.attributes.name
+                genreOption.value = genre.id
+                genreSelect.append(genreOption)
+            })
+        })
+    newBookForm.addEventListener('submit', (e)=>{
+        e.preventDefault()
+        fetchCreateBook(e.target).then(book => {
+            bookContainer.innerHTML ='Successfully created a new book!'
+            showBookDetails(book.data)})
+    })
+    
+}

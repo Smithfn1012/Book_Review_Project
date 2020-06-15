@@ -3,4 +3,8 @@ class ReviewsController < ApplicationController
         reviews = Review.all
         render.json: ReviewSerializer.new(reviews)
     end
-end
+
+    def create
+        review = Review.create(create_review_params)
+        render json: ReviewSerializer.new(review)
+    end

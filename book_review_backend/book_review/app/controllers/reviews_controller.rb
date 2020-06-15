@@ -1,7 +1,7 @@
 class ReviewsController < ApplicationController
-    def index
+    def index 
         reviews = Review.all
-        render.json: ReviewSerializer.new(reviews)
+        render json: ReviewSerializer.new(reviews)
     end
 
     def create
@@ -9,7 +9,8 @@ class ReviewsController < ApplicationController
         render json: ReviewSerializer.new(review)
     end
 
-    private
+
+    private 
 
     def create_review_params
         params.require(:review).permit(:stars, :content, :book_id)

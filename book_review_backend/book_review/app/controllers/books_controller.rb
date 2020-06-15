@@ -1,15 +1,16 @@
 class BooksController < ApplicationController
-    def index
+
+    def index 
         books = Book.all
-        render json: BookSerializer.new(books)
+        render json: BookSerializer.new(books) 
     end
 
     def show
         book = Book.find_by(id: params[:id])
         render json: BookSerializer.new(book)
-    end
+    end 
 
-    def create
+    def create 
         book = Book.create(create_book_params)
         render json: BookSerializer.new(book)
     end
@@ -20,13 +21,13 @@ class BooksController < ApplicationController
         render json: BookSerializer.new(book)
     end
 
-    private
-
-    def create_book_params
+    private 
+    def create_book_params 
         params.require(:book).permit(:title, :author, :image, :genre_id, :abstract, :fiction, :read_throughs)
     end
 
     def read_through_params
         params.require(:book).permit(:read_throughs)
     end
+    
 end

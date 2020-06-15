@@ -26,5 +26,7 @@ class BooksController < ApplicationController
         params.require(:book).permit(:title, :author, :image, :genre_id, :abstract, :fiction, :read_throughs)
     end
 
-
+    def read_through_params
+        params.require(:book).permit(:read_throughs)
+    end
 end

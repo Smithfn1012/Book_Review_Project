@@ -20,5 +20,11 @@ class BooksController < ApplicationController
         render json: BookSerializer.new(book)
     end
 
-    
+    private
+
+    def create_book_params
+        params.require(:book).permit(:title, :author, :image, :genre_id, :abstract, :fiction, :read_throughs)
+    end
+
+
 end

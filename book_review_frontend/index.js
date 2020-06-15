@@ -11,3 +11,10 @@ logo.addEventListener('click', ()=>{
     featuredBooks.innerHTML = ''
     renderFeaturedBooks()
 })
+
+renderFeaturedBooks()
+
+  function fetchAllBooks() {
+      return fetch(`${bookIndexUrl}`)
+      .then(r => r.json())
+  }

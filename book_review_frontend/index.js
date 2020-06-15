@@ -222,3 +222,27 @@ genreButton.addEventListener("click",(e)=> {
 })
 genreFormContainer.prepend(genreButton)
 
+function renderBookElements(book){
+    let title = document.createElement("h2")
+    title.innerText = `${book.attributes.title}`
+
+    let author = document.createElement("h4")
+    author.innerText = `Author: ${book.attributes.author}`
+
+    let image = document.createElement("img")
+    image.src = book.attributes.image
+    image.className = 'book-image'
+    image.style.width ='250px'
+    image.style.height ='340px'
+
+    let abstract = document.createElement("p")
+    abstract.innerText = `${book.attributes.abstract}`
+
+    let fiction = document.createElement("p")
+    fiction.innerText = `${(book.attributes.fiction ? 'Fiction':'Non-Fiction')} - ${book.attributes.genre.name}`
+     
+    let elementsArray = [title, author, image, abstract, fiction]
+    return elementsArray
+}
+
+

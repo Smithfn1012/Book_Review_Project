@@ -249,4 +249,56 @@ function displayReadThroughs(book, numberOfReadings){
     return book.attributes.read_throughs === null ? numberOfReadings.innerText = `This book has been not been read!` : numberOfReadings.innerText = book.attributes.read_throughs === 1 ? `This book has been read ${book.attributes.read_throughs} time!` : `This book has been read ${book.attributes.read_throughs} times!`
 }
 
+function showBookDetails(book){
+    featuredBooks.innerHTML = ''
+    showBookDiv.innerHTML = ''
+    showBookDiv.classList.add( 'ui', 'card')
+    showBookDiv.style.textAlign = 'center'
+    let numberOfReadings = document.createElement("h4")
+    displayReadThroughs(book, numberOfReadings)
+    let readingButton = document.createElement("button")
+    readingButton.innerText = 'I read this book!'
+    readingButton.addEventListener("click",(e)=>{
+        fetchUpdateReadThroughs(book).then(json =>{
+            displayReadThroughs(book, numberOfReadings)
+        })
+    })
+
+    let elementsArray = renderBookElements(book)
+    let bookImage = elementsArray[2]
+
+    // Below creates review forms for each individual book
+    let reviewHeader = document.createElement('h3')
+    reviewHeader.innerText = 'Leave a Review!'
+    reviewHeader.style.textAlign = 'left'
+    let reviewForm = document.createElement("form")
+    reviewForm.innerHTML = `Star Rating:
+        <select name="stars"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select> <br> <br>
+        <textarea name="content" placeholder="Enter a review..."></textarea>
+        <input type="submit"></input> <br>
+        <h3>Previous Reviews</h3>
+    `
+    reviewForm.style.textAlign = 'left'
+    let reviewDiv = document.createElement("div")
+    reviewDiv.className = 'review-div'
+    reviewForm.addEventListener("submit", (e)=> {
+        e.preventDefault()
+        fetchCreateReview(e.target, book).then(json => {
+            book.attributes.reviews.push(json.data.attributes)
+            showReviews(json.data.attributes, reviewDiv)
+            reviewForm.reset()
+        })
+    })
+    if(book.attributes.reviews.length){
+        book.attributes.reviews.forEach(review=>{
+            showReviews(review, reviewDiv)
+        })
+    } else {
+        reviewDiv.style.textAlign = 'center'
+        reviewDiv.innerHTML = "<h3>Be the first to review this book!</h3>"
+    }
+    showBookDiv.append(elementsArray[0], elementsArray[1], elementsArray[2], elementsArray[3], elementsArray[4], numberOfReadings, readingButton, reviewHeader, reviewForm, reviewDiv)
+}
+
+
 

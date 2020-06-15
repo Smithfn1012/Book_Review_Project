@@ -139,3 +139,12 @@ function createBook(){
     })
     
 }
+
+function renderAFilteredBook(book){
+    let bookLi = document.createElement("li")
+    bookLi.innerHTML = ` <strong><em>Title:</em></strong> ${book.attributes.title} - <em>Author:</em> ${book.attributes.author}`
+    bookContainer.append(bookLi)
+    bookLi.addEventListener("click", (e) => {
+        showBookDetails(book)
+    })
+}

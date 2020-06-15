@@ -300,5 +300,21 @@ function showBookDetails(book){
     showBookDiv.append(elementsArray[0], elementsArray[1], elementsArray[2], elementsArray[3], elementsArray[4], numberOfReadings, readingButton, reviewHeader, reviewForm, reviewDiv)
 }
 
+function showReviews(review, reviewDiv){
+    if(reviewDiv.querySelector('h3')){
+        let firstReviewHeader = reviewDiv.querySelector('h3')
+        firstReviewHeader.remove()
+        reviewDiv.style.textAlign = 'left'
+    }
+    let hardRule = document.createElement('hr')
+    let star = `\u{2B50}`;
+    let starsP = document.createElement("p")
+    starsP.innerText = `Star Rating: ${star.repeat(review.stars)}`
+    let contentP = document.createElement("p")
+    contentP.innerText = `Review: ${review.content}`
+    reviewDiv.append(starsP, contentP,hardRule)
+}
+
+
 
 

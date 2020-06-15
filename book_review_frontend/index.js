@@ -70,3 +70,20 @@ function fetchCreateReview(review, book) {
     return fetch(`${reviewIndexUrl}`, configObj)
         .then(r=>r.json())
 }
+
+function fetchUpdateReadThroughs(book) {
+    book.attributes.read_throughs++
+    const configObj = {
+        method: 'PATCH',
+        headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json'
+        },
+        body: JSON.stringify({
+            read_throughs: book.attributes.read_throughs
+        })
+    }
+
+    return fetch(`${bookIndexUrl}/${book.id}`, configObj)
+        .then(r => r.json())
+}

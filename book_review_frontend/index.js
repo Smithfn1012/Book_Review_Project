@@ -50,3 +50,23 @@ renderFeaturedBooks()
     return fetch(`${bookIndexUrl}`, configObj)
         .then(r => r.json())
 }
+
+function fetchCreateReview(review, book) {
+    const newReview = {
+        stars: review.starts.value,
+        content: review.content.value,
+        book_id: book.id,
+    }
+
+    const configObj = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json'
+        },
+        body: JSON.stringify(newReview)
+    }
+
+    return fetch(`${reviewIndexUrl}`, configObj)
+        .then(r=>r.json())
+}

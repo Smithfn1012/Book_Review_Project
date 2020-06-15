@@ -148,3 +148,36 @@ function renderAFilteredBook(book){
         showBookDetails(book)
     })
 }
+
+let searchBar = document.createElement("form")
+let input = document.createElement("input")
+input.name = "book-title"
+input.placeholder = "Enter a book title or author..."
+input.style.width = '20vw'
+let searchButton = document.createElement("button")
+searchButton.innerText = "Submit"
+
+searchBar.append(input, searchButton)
+searchBar.addEventListener("submit", (e) => {
+    e.preventDefault()
+    // showBookDiv.innerHTML = '';
+    genreContainer.innerHTML = ''
+    fetchAllBooks()
+        .then(books => {
+            if(e.target['book-title'].value === ""){
+                window.alert("You sent a blank search.  Please enter a book title or author.")
+            } else {
+                let bookMatches = books.data.filter(book => book.attributes.title.includes(capitalize(e.target['book-title'].value.toLowerCase())) || book.attributes.author.includes(capitalize(e.target['book-title'].value.toLowerCase())))
+                if(bookMatches[0]){
+                    bookContainer.innerHTML = '<h3>Search Results</h3>'
+                    bookMatches.forEach(book =>{ 
+                        renderAFilteredBook(book)
+                    })
+                } else {
+                    renderErrorMessage()
+                }
+            }
+            searchBar.reset()
+        })
+})
+formContainer.append(searchBar)

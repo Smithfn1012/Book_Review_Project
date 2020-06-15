@@ -6,31 +6,33 @@ let genreContainer = document.querySelector('.genre-container')
 let featuredBooks = document.querySelector('.featured-books')
 let logo = document.querySelector('#logo')
 let hardRule = document.createElement('hr')
-
 logo.addEventListener('click', ()=>{
     featuredBooks.innerHTML = ''
     renderFeaturedBooks()
 })
 
+let bookIndexUrl = "https://localhost:3000/books"
+let genreIndexUrl = "https://localhost:3000/genres"
+let reviewIndexUrl = "https://localhost:3000/reviews"
+
 renderFeaturedBooks()
+// Fetches
+function fetchAllBooks(){
+    return fetch(`${bookIndexUrl}`)
+        .then(r => r.json())
+}
 
-  function fetchAllBooks() {
-      return fetch(`${bookIndexUrl}`)
-      .then(r => r.json())
-  }
+function fetchAllGenres(){
+    return fetch(genreIndexUrl)
+        .then(r => r.json())
+}
 
-  function fetchAllGenres() {
-      return fetch(genresIndexUrl)
-      .then(r => r.json())
-  }
+function fetchFeaturedBooks(averageReviewObj){
+    return fetch(`${bookIndexUrl}/${averageReviewObj.bookId}`)
+        .then(r => r.json())
+}
 
-  function fetchFeaturedBooks(averageReviewObj) {
-      return fetch(`${bookIndexUrl}/${averageReviewObj.bookId}`)
-      .then(r => r.json())
-  }
-
-  function fetchCreateBook(bookDetails) {
-
+function fetchCreateBook(bookDetails){
     const newBook = {
         title: capitalize(bookDetails['book-title'].value.toLowerCase()),
         author: capitalize(bookDetails['book-author'].value.toLowerCase()),
@@ -51,13 +53,12 @@ renderFeaturedBooks()
         .then(r => r.json())
 }
 
-function fetchCreateReview(review, book) {
+function fetchCreateReview(review, book){
     const newReview = {
-        stars: review.starts.value,
+        stars: review.stars.value,
         content: review.content.value,
         book_id: book.id,
     }
-
     const configObj = {
         method: 'POST',
         headers: {
@@ -66,12 +67,11 @@ function fetchCreateReview(review, book) {
         },
         body: JSON.stringify(newReview)
     }
-
     return fetch(`${reviewIndexUrl}`, configObj)
         .then(r=>r.json())
 }
 
-function fetchUpdateReadThroughs(book) {
+function fetchUpdateReadThroughs(book){
     book.attributes.read_throughs++
     const configObj = {
         method: 'PATCH',
@@ -83,10 +83,10 @@ function fetchUpdateReadThroughs(book) {
             read_throughs: book.attributes.read_throughs
         })
     }
-
     return fetch(`${bookIndexUrl}/${book.id}`, configObj)
         .then(r => r.json())
 }
+// End Fetches
 
 function renderErrorMessage(){
     bookContainer.innerHTML = '';
@@ -100,7 +100,7 @@ function renderErrorMessage(){
     bookContainer.append(bookHeader, bookButton)
 
 }
-
+//Renders form to create a new book
 function createBook(){
     showBookDiv.innerHTML = ''
     bookContainer.innerHTML = `
@@ -140,6 +140,7 @@ function createBook(){
     
 }
 
+// Renders books in list after search
 function renderAFilteredBook(book){
     let bookLi = document.createElement("li")
     bookLi.innerHTML = ` <strong><em>Title:</em></strong> ${book.attributes.title} - <em>Author:</em> ${book.attributes.author}`
@@ -149,6 +150,7 @@ function renderAFilteredBook(book){
     })
 }
 
+// Search Bar
 let searchBar = document.createElement("form")
 let input = document.createElement("input")
 input.name = "book-title"
@@ -182,6 +184,7 @@ searchBar.addEventListener("submit", (e) => {
 })
 formContainer.append(searchBar)
 
+// Genre Search Button
 let genreButton = document.createElement("button")
 genreButton.innerText = "Search By Genre"
 genreButton.addEventListener("click",(e)=> {
@@ -222,6 +225,7 @@ genreButton.addEventListener("click",(e)=> {
 })
 genreFormContainer.prepend(genreButton)
 
+// creates book elements that will display full book details
 function renderBookElements(book){
     let title = document.createElement("h2")
     title.innerText = `${book.attributes.title}`
@@ -249,6 +253,8 @@ function displayReadThroughs(book, numberOfReadings){
     return book.attributes.read_throughs === null ? numberOfReadings.innerText = `This book has been not been read!` : numberOfReadings.innerText = book.attributes.read_throughs === 1 ? `This book has been read ${book.attributes.read_throughs} time!` : `This book has been read ${book.attributes.read_throughs} times!`
 }
 
+
+// Renders the created book elements from renderBookElements with a reviews form + reviews
 function showBookDetails(book){
     featuredBooks.innerHTML = ''
     showBookDiv.innerHTML = ''
@@ -300,6 +306,7 @@ function showBookDetails(book){
     showBookDiv.append(elementsArray[0], elementsArray[1], elementsArray[2], elementsArray[3], elementsArray[4], numberOfReadings, readingButton, reviewHeader, reviewForm, reviewDiv)
 }
 
+//Displays Reviews for an individual book
 function showReviews(review, reviewDiv){
     if(reviewDiv.querySelector('h3')){
         let firstReviewHeader = reviewDiv.querySelector('h3')
@@ -315,6 +322,7 @@ function showReviews(review, reviewDiv){
     reviewDiv.append(starsP, contentP,hardRule)
 }
 
+//Displays books that have the highest ratings in our db
 function renderFeaturedBooks(){
     genreContainer.innerHTML = ''
     showBookDiv.innerHTML =  ''
@@ -361,6 +369,7 @@ function renderFeaturedBooks(){
     })
 }
 
+// Algorithm to capitalize the first letter of strings
 function capitalize(string){
     const words = []
     for(let word of string.split(' ')){

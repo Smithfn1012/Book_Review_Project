@@ -18,3 +18,8 @@ renderFeaturedBooks()
       return fetch(`${bookIndexUrl}`)
       .then(r => r.json())
   }
+
+  function fetchAllGenres() {
+      return fetch(genresIndexUrl)
+      .then(r => r.json())
+  }

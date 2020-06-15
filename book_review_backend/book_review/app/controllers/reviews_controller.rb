@@ -8,3 +8,10 @@ class ReviewsController < ApplicationController
         review = Review.create(create_review_params)
         render json: ReviewSerializer.new(review)
     end
+
+    private
+
+    def create_review_params
+        params.require(:review).permit(:stars, :content, :book_id)
+    end
+end

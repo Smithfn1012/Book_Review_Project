@@ -28,3 +28,25 @@ renderFeaturedBooks()
       return fetch(`${bookIndexUrl}/${averageReviewObj.bookId}`)
       .then(r => r.json())
   }
+
+  function fetchCreateBook(bookDetails) {
+
+    const newBook = {
+        title: capitalize(bookDetails['book-title'].value.toLowerCase()),
+        author: capitalize(bookDetails['book-author'].value.toLowerCase()),
+        image: bookDetails['book-image'].value,
+        genre_id: parseInt(bookDetails['book-genre'].value),
+        abstract: bookDetails['book-abstract'].value,
+        fiction: bookDetails.fiction.checked
+    }
+    const configObj = {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json'
+        },
+        body: JSON.stringify(newBook)
+    }
+    return fetch(`${bookIndexUrl}`, configObj)
+        .then(r => r.json())
+}

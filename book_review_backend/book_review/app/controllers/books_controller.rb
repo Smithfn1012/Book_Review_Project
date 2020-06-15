@@ -13,4 +13,12 @@ class BooksController < ApplicationController
         book = Book.create(create_book_params)
         render json: BookSerializer.new(book)
     end
+
+    def update
+        book = Book.find_by(id: params[:id])
+        book.update(read_through_params)
+        render json: BookSerializer.new(book)
+    end
+
+    
 end

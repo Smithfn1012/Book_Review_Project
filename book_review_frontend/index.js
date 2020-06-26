@@ -151,6 +151,27 @@ function renderAFilteredBook(book){
     })
 }
 
+function sortButton() {
+    const sortButton = document.querySelector("button")
+    let sortLi = document.createElement("li")
+    sortButton.innerText = "Sort"
+    bookContainer.append(sortButton)
+    sortButton.querySelectorAll('book').addEventListener("click", (e) => {
+        e.preventDefault()
+    let sortBooks = fetchAllBooks(e.target).then(json => {
+            json.data.forEach(book =>{
+                let bookOption = document.createElement('option')
+                bookOption.innerText = book.attributes.name
+                bookOption.value = book.id
+                sortBooks.sort()
+            })
+        })    
+    })
+}
+
+sortButton();
+
+
 // Search Bar
 let searchBar = document.createElement("form")
 let input = document.createElement("input")
